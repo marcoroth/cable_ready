@@ -25,7 +25,14 @@
     "prettier-standard:format": "yarn run prettier-standard *.js **/*.js"
   },
   "dependencies": {
-    "@cable_ready/core": "^4.4.6"
+    "@cable_ready/core": "^4.5.0",
+    "@cable_ready/dom_operations": "^4.5.0",
+    "@cable_ready/dom_event_operations": "^4.5.0",
+    "@cable_ready/element_operations": "^4.5.0",
+    "@cable_ready/notification_operations": "^4.5.0"
+  },
+  "optionalDependencies": {
+    "@cable_ready/audio_operations": "^4.5.0"
   },
   "devDependencies": {
     "prettier-standard": "^16.4.1"
