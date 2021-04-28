@@ -29,7 +29,8 @@
     "@cable_ready/dom_operations": "^4.5.0",
     "@cable_ready/dom_event_operations": "^4.5.0",
     "@cable_ready/element_operations": "^4.5.0",
-    "@cable_ready/notification_operations": "^4.5.0"
+    "@cable_ready/notification_operations": "^4.5.0",
+    "@cable_ready/browser_operations": "^4.5.0"
   },
   "optionalDependencies": {
     "@cable_ready/audio_operations": "^4.5.0"
