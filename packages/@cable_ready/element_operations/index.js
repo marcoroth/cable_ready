@@ -1,7 +1,8 @@
-import CableReady from '@cable_ready/core'
+import { Utils, MorphCallbacks } from '@cable_ready/core'
 
-const { shouldMorph, didMorph } = CableReady
-const { assignFocus, dispatch, getClassNames, processElements } = CableReady
+const { shouldMorph, didMorph } = MorphCallbacks
+const { assignFocus, dispatch, getClassNames, processElements } = Utils
+
 
 export default {
   addCssClass: operation => {

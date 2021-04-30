@@ -1,7 +1,6 @@
-import CableReady from '@cable_ready/core'
+import { Utils } from '@cable_ready/core'
 
-const { shouldMorph, didMorph } = CableReady
-const { assignFocus, dispatch, getClassNames, processElements } = CableReady
+const { dispatch } = Utils
 
 export default {
   consoleLog: operation => {

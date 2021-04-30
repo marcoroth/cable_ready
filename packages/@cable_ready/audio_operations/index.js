@@ -1,9 +1,8 @@
-import CableReady from '@cable_ready/core'
+import { Utils } from '@cable_ready/core'
 
 import './event_listeners'
 
-const { shouldMorph, didMorph } = CableReady
-const { assignFocus, dispatch, getClassNames, processElements } = CableReady
+const { dispatch } = Utils
 
 export default {
   playSound: operation => {
