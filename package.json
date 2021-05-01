@@ -23,14 +23,27 @@
   },
   "license": "MIT",
   "author": "Nathan Hopkins <natehop@gmail.com>",
-  "main": "./javascript/cable_ready.js",
+  "source": "./javascript/index.js",
+  "main": "./dist/cable_ready.js",
+  "umd:main": "./dist/cable_ready.umd.js",
+  "esmodule": "./dist/cable_ready.modern.js",
+  "module": "./dist/cable_ready.module.js",
+  "unpkg": "./dist/cable_ready.umd.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "prettier-standard-check": "yarn run prettier-standard --check ./javascript/**/*.js"
+    "prettier-standard:check": "yarn run prettier-standard --check ./javascript/**/*.js",
+    "prettier-standard:format": "yarn run prettier-standard ./javascript/**/*.js",
+    "format": "yarn run prettier-standard:format",
+    "prepublishOnly": "microbundle",
+    "prepare": "microbundle --no-compress",
+    "build": "microbundle --no-compress",
+    "dev": "microbundle watch --no-compress"
   },
   "dependencies": {
     "morphdom": "^2.6.1"
   },
   "devDependencies": {
+    "microbundle": "^0.13.0",
     "prettier-standard": "^16.1.0"
   }
 }
