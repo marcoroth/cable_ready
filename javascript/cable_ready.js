@@ -1,12 +1,7 @@
-import { verifyNotMutable, verifyNotPermanent } from './morph_callbacks'
 import { xpathToElement } from './utils'
 import activeElement from './active_element'
 import DOMOperations from './operations'
 import actionCable from './action_cable'
-import './stream_from_element'
-
-export const shouldMorphCallbacks = [verifyNotMutable, verifyNotPermanent]
-export const didMorphCallbacks = []
 
 const perform = (
   operations,
@@ -84,11 +79,8 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 })
 
-export default {
+export {
   perform,
   performAsync,
-  DOMOperations,
-  shouldMorphCallbacks,
-  didMorphCallbacks,
   initialize
 }
