@@ -30,12 +30,16 @@
   "module": "./dist/cable_ready.module.js",
   "unpkg": "./dist/cable_ready.umd.js",
   "types": "./dist/index.d.ts",
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.ts"
+  ],
   "scripts": {
     "prettier-standard:check": "yarn run prettier-standard --check ./javascript/**/*.js",
     "prettier-standard:format": "yarn run prettier-standard ./javascript/**/*.js",
     "format": "yarn run prettier-standard:format",
-    "prepublishOnly": "microbundle",
-    "prepare": "microbundle --no-compress",
+    "postinstall": "microbundle --no-compress",
+    "prepack": "microbundle --no-compress",
     "build": "microbundle --no-compress",
     "dev": "microbundle watch --no-compress"
   },
