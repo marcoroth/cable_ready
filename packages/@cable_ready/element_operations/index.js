@@ -1,90 +1,105 @@
 import { Utils, MorphCallbacks } from '@cable_ready/core'
 
-const { shouldMorph, didMorph } = MorphCallbacks
-const { assignFocus, dispatch, getClassNames, processElements } = Utils
-
+const { getClassNames, processElements, before, operate, after } = Utils
 
 export default {
-  addCssClass: operation => {
+  addCssClass: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-add-css-class', operation)
-      const { name } = operation
-      if (!operation.cancel) element.classList.add(...getClassNames(name || ''))
-      dispatch(element, 'cable-ready:after-add-css-class', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name } = operation
+        element.classList.add(...getClassNames(name || ''))
+      })
+      after(element, callee, operation)
     })
   },
 
-  removeAttribute: operation => {
+  removeAttribute: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-remove-attribute', operation)
-      const { name } = operation
-      if (!operation.cancel) element.removeAttribute(name)
-      dispatch(element, 'cable-ready:after-remove-attribute', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name } = operation
+        element.removeAttribute(name)
+      })
+      after(element, callee, operation)
     })
   },
 
-  removeCssClass: operation => {
+  removeCssClass: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-remove-css-class', operation)
-      const { name } = operation
-      if (!operation.cancel) element.classList.remove(...getClassNames(name))
-      dispatch(element, 'cable-ready:after-remove-css-class', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name } = operation
+        element.classList.remove(...getClassNames(name))
+      })
+      after(element, callee, operation)
     })
   },
 
-  setAttribute: operation => {
+  setAttribute: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-set-attribute', operation)
-      const { name, value } = operation
-      if (!operation.cancel) element.setAttribute(name, value || '')
-      dispatch(element, 'cable-ready:after-set-attribute', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name, value } = operation
+        element.setAttribute(name, value || '')
+      })
+      after(element, callee, operation)
     })
   },
 
-  setDatasetProperty: operation => {
+  setDatasetProperty: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-set-dataset-property', operation)
-      const { name, value } = operation
-      if (!operation.cancel) element.dataset[name] = value || ''
-      dispatch(element, 'cable-ready:after-set-dataset-property', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name, value } = operation
+        element.dataset[name] = value || ''
+      })
+      after(element, callee, operation)
     })
   },
 
-  setProperty: operation => {
+  setProperty: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-set-property', operation)
-      const { name, value } = operation
-      if (!operation.cancel && name in element) element[name] = value || ''
-      dispatch(element, 'cable-ready:after-set-property', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name, value } = operation
+        if (name in element) element[name] = value || ''
+      })
+      after(element, callee, operation)
     })
   },
 
-  setStyle: operation => {
+  setStyle: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-set-style', operation)
-      const { name, value } = operation
-      if (!operation.cancel) element.style[name] = value || ''
-      dispatch(element, 'cable-ready:after-set-style', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { name, value } = operation
+        element.style[name] = value || ''
+      })
+      after(element, callee, operation)
     })
   },
 
-  setStyles: operation => {
+  setStyles: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-set-styles', operation)
-      const { styles } = operation
-      for (let [name, value] of Object.entries(styles)) {
-        if (!operation.cancel) element.style[name] = value || ''
-      }
-      dispatch(element, 'cable-ready:after-set-styles', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { styles } = operation
+        for (let [name, value] of Object.entries(styles))
+          element.style[name] = value || ''
+      })
+      after(element, callee, operation)
     })
   },
 
-  setValue: operation => {
+  setValue: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-set-value', operation)
-      const { value } = operation
-      if (!operation.cancel) element.value = value || ''
-      dispatch(element, 'cable-ready:after-set-value', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { value } = operation
+        element.value = value || ''
+      })
+      after(element, callee, operation)
     })
   }
 }

@@ -1,10 +1,10 @@
 let operations = {}
 
-const add = (newOperations) => {
+const add = newOperations => {
   operations = { ...operations, ...newOperations }
 }
 
-const addOperations = (operations) => {
+const addOperations = operations => {
   add(operations)
 }
 
@@ -15,14 +15,10 @@ const addOperation = (name, operation) => {
   add(operations)
 }
 
-export {
-  add,
-  addOperations,
-  addOperation,
-}
+export { add, addOperations, addOperation }
 
 export default {
-  get all() {
+  get all () {
     return operations
   }
 }

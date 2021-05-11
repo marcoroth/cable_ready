@@ -1,19 +1,21 @@
 import { Utils } from '@cable_ready/core'
 
-const { dispatch, getClassNames, processElements } = Utils
+const { dispatch, processElements, before, operate, after } = Utils
 
 export default {
-  dispatchEvent: operation => {
+  dispatchEvent: (operation, callee) => {
     processElements(operation, element => {
-      const { name, detail } = operation
-      dispatch(element, name, detail)
+      operate(operation, () => {
+        const { name, detail } = operation
+        dispatch(element, name, detail)
+      })
     })
   },
 
-  setMeta: operation => {
-    dispatch(document, 'cable-ready:before-set-meta', operation)
-    const { name, content } = operation
-    if (!operation.cancel) {
+  setMeta: (operation, callee) => {
+    before(document, callee, operation)
+    operate(operation, () => {
+      const { name, content } = operation
       let meta = document.head.querySelector(`meta[name='${name}']`)
       if (!meta) {
         meta = document.createElement('meta')
@@ -21,7 +23,7 @@ export default {
         document.head.appendChild(meta)
       }
       meta.content = content
-    }
-    dispatch(document, 'cable-ready:after-set-meta', operation)
+    })
+    after(document, callee, operation)
   }
 }

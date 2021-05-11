@@ -2,81 +2,83 @@ import morphdom from 'morphdom'
 import { Utils, MorphCallbacks } from '@cable_ready/core'
 
 const { shouldMorph, didMorph } = MorphCallbacks
-const { assignFocus, dispatch, getClassNames, processElements } = Utils
+const { assignFocus, processElements, before, operate, after } = Utils
 
 export default {
-  append: operation => {
+  append: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-append', operation)
-      const { html, focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { html, focusSelector } = operation
         element.insertAdjacentHTML('beforeend', html || '')
         assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-append', operation)
+      })
+      after(element, callee, operation)
     })
   },
 
-  graft: operation => {
+  graft: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-graft', operation)
-      const { parent, focusSelector } = operation
-      const parentElement = document.querySelector(parent)
-      if (!operation.cancel && parentElement) {
-        parentElement.appendChild(element)
-        assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-graft', operation)
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { parent, focusSelector } = operation
+        const parentElement = document.querySelector(parent)
+        if (parentElement) {
+          parentElement.appendChild(element)
+          assignFocus(focusSelector)
+        }
+      })
+      after(element, callee, operation)
     })
   },
 
-  innerHtml: operation => {
+  innerHtml: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-inner-html', operation)
-      const { html, focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { html, focusSelector } = operation
         element.innerHTML = html || ''
         assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-inner-html', operation)
+      })
+      after(element, callee, operation)
     })
   },
 
-  insertAdjacentHtml: operation => {
+  insertAdjacentHtml: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-insert-adjacent-html', operation)
-      const { html, position, focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { html, position, focusSelector } = operation
         element.insertAdjacentHTML(position || 'beforeend', html || '')
         assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-insert-adjacent-html', operation)
+      })
+      after(element, callee, operation)
     })
   },
 
-  insertAdjacentText: operation => {
+  insertAdjacentText: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-insert-adjacent-text', operation)
-      const { text, position, focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { text, position, focusSelector } = operation
         element.insertAdjacentText(position || 'beforeend', text || '')
         assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-insert-adjacent-text', operation)
+      })
+      after(element, callee, operation)
     })
   },
 
-  morph: operation => {
+  morph: (operation, callee) => {
     processElements(operation, element => {
       const { html } = operation
       const template = document.createElement('template')
       template.innerHTML = String(html).trim()
       operation.content = template.content
-      dispatch(element, 'cable-ready:before-morph', operation)
-      const { childrenOnly, focusSelector } = operation
       const parent = element.parentElement
       const ordinal = Array.from(parent.children).indexOf(element)
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { childrenOnly, focusSelector } = operation
         morphdom(
           element,
           childrenOnly ? template.content : template.innerHTML,
@@ -87,76 +89,72 @@ export default {
           }
         )
         assignFocus(focusSelector)
-      }
-      dispatch(parent.children[ordinal], 'cable-ready:after-morph', operation)
+      })
+      after(parent.children[ordinal], callee, operation)
     })
   },
 
-  outerHtml: operation => {
+  outerHtml: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-outer-html', operation)
-      const { html, focusSelector } = operation
       const parent = element.parentElement
       const ordinal = Array.from(parent.children).indexOf(element)
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { html, focusSelector } = operation
         element.outerHTML = html || ''
         assignFocus(focusSelector)
-      }
-      dispatch(
-        parent.children[ordinal],
-        'cable-ready:after-outer-html',
-        operation
-      )
+      })
+      after(parent.children[ordinal], callee, operation)
     })
   },
 
-  prepend: operation => {
+  prepend: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-prepend', operation)
-      const { html, focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { html, focusSelector } = operation
         element.insertAdjacentHTML('afterbegin', html || '')
         assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-prepend', operation)
+      })
+      after(element, callee, operation)
     })
   },
 
-  remove: operation => {
+  remove: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-remove', operation)
-      const { focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { focusSelector } = operation
         element.remove()
         assignFocus(focusSelector)
-      }
-      dispatch(document, 'cable-ready:after-remove', operation)
+      })
+      after(document, callee, operation)
     })
   },
 
-  replace: operation => {
+  replace: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-replace', operation)
-      const { html, focusSelector } = operation
       const parent = element.parentElement
       const ordinal = Array.from(parent.children).indexOf(element)
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { html, focusSelector } = operation
         element.outerHTML = html || ''
         assignFocus(focusSelector)
-      }
-      dispatch(parent.children[ordinal], 'cable-ready:after-replace', operation)
+      })
+      after(parent.children[ordinal], callee, operation)
     })
   },
 
-  textContent: operation => {
+  textContent: (operation, callee) => {
     processElements(operation, element => {
-      dispatch(element, 'cable-ready:before-text-content', operation)
-      const { text, focusSelector } = operation
-      if (!operation.cancel) {
+      before(element, callee, operation)
+      operate(operation, () => {
+        const { text, focusSelector } = operation
         element.textContent = text || ''
         assignFocus(focusSelector)
-      }
-      dispatch(element, 'cable-ready:after-text-content', operation)
+      })
+      after(element, callee, operation)
     })
   }
 }

@@ -1,5 +1,5 @@
 import * as MorphCallbacks from './morph_callbacks'
-import { shouldMorphCallbacks, didMorphCallbacks } from './morph_callbacks'
+import { shouldMorphCallbacks, didMorphCallbacks } from './morph_callbacks'
 import * as Utils from './utils'
 import Operations, { addOperation, addOperations } from './operations'
 import { perform, performAsync, initialize } from './cable_ready'
@@ -15,11 +15,13 @@ export default {
   initialize,
   addOperation,
   addOperations,
-  get DOMOperations() {
-    console.warn("DEPRECATED: Please use `CableReady.operations.jazzHands = ...` instead of `CableReady.DOMOperations.jazzHands = ...`")
+  get DOMOperations () {
+    console.warn(
+      'DEPRECATED: Please use `CableReady.operations.jazzHands = ...` instead of `CableReady.DOMOperations.jazzHands = ...`'
+    )
     return Operations.all
   },
-  get operations() {
+  get operations () {
     return Operations.all
   }
 }

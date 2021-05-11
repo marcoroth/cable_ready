@@ -23,7 +23,7 @@ const perform = (
           }
           if (operation.element || options.emitMissingElementWarnings) {
             activeElement.set(document.activeElement)
-            Operations.all[name](operation)
+            Operations.all[name](operation, name)
           }
         } catch (e) {
           if (operation.element) {
@@ -60,8 +60,4 @@ const initialize = (initializeOptions = {}) => {
   actionCable.setConsumer(consumer)
 }
 
-export {
-  perform,
-  performAsync,
-  initialize
-}
+export { perform, performAsync, initialize }

@@ -62,11 +62,45 @@ const processElements = (operation, callback) => {
   ).forEach(callback)
 }
 
+// camelCase to kebab-case
+//
+const kebabize = str => {
+  return str
+    .split('')
+    .map((letter, idx) => {
+      return letter.toUpperCase() === letter
+        ? `${idx !== 0 ? '-' : ''}${letter.toLowerCase()}`
+        : letter
+    })
+    .join('')
+}
+
+// Provide a standardized pipeline of checks and modifications to all operations based on provided options
+// Currently skips execution if cancelled and implements an optional delay
+//
+const operate = (operation, callback) => {
+  if (!operation.cancel) {
+    operation.delay ? setTimeout(callback, operation.delay) : callback()
+    return true
+  }
+  return false
+}
+
+// Dispatch life-cycle events with standardized naming
+const before = (target, name, operation) =>
+  dispatch(target, `cable-ready:before-${kebabize(name)}`, operation)
+
+const after = (target, name, operation) =>
+  dispatch(target, `cable-ready:after-${kebabize(name)}`, operation)
+
 export {
   isTextInput,
   assignFocus,
   dispatch,
   xpathToElement,
   getClassNames,
-  processElements
+  processElements,
+  operate,
+  before,
+  after
 }

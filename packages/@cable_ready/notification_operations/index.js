@@ -1,23 +1,26 @@
 import { Utils } from '@cable_ready/core'
 
-const { dispatch } = Utils
+const { before, operate, after } = Utils
 
 export default {
-  consoleLog: operation => {
-    const { message, level } = operation
-    level && ['warn', 'info', 'error'].includes(level)
-      ? console[level](message || '')
-      : console.log(message || '')
+  consoleLog: (operation, callee) => {
+    operate(operation, () => {
+      const { message, level } = operation
+      level && ['warn', 'info', 'error'].includes(level)
+        ? console[level](message || '')
+        : console.log(message || '')
+    })
   },
 
-  notification: operation => {
-    dispatch(document, 'cable-ready:before-notification', operation)
-    const { title, options } = operation
-    if (!operation.cancel)
+  notification: (operation, callee) => {
+    before(document, callee, operation)
+    operate(operation, () => {
+      const { title, options } = operation
       Notification.requestPermission().then(result => {
         operation.permission = result
         if (result === 'granted') new Notification(title || '', options)
       })
-    dispatch(document, 'cable-ready:after-notification', operation)
+    })
+    after(document, callee, operation)
   }
 }
